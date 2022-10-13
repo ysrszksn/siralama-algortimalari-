@@ -1,0 +1,258 @@
+#include <iostream>
+
+using namespace std;
+
+
+void SayarakSıralama(int dizi[], int n)
+{
+    int max = 0;
+
+
+    for (int i = 0; i <= n; i++)
+    {
+        if (max < dizi[i])
+        {
+            max = dizi[i];
+        }
+    }
+    int* indis = new int[max + 1];
+    for (int i = 0; i < max + 1; i++)
+    {
+        indis[i] = 0;
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        indis[dizi[i]]++;
+    }
+
+    for (int i = 0, j = 0; i <= max; i++)
+    {
+        while (indis[i] > 0)
+        {
+            dizi[j] = i;
+            j++;
+            indis[i]--;
+
+        }
+    }
+
+}
+void BaloncukSıralama(int dizi[], int n)
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = 0; j < n - i - 1; j++)
+        {
+            if (dizi[j] > dizi[j + 1])
+            {
+                int temp = dizi[j];
+                dizi[j] = dizi[j + 1];
+                dizi[j + 1] = temp;
+            }
+        }
+    }
+}
+void SecerekSıralama(int dizi[], int n)
+{
+    int tmp;
+    int min;
+
+    for (int i = 0; i < n - 1; i++)
+    {
+        min = i;
+
+        for (int j = i; j < n; j++)
+        {
+            if (dizi[j] < dizi[min])
+            {
+
+                min = j;
+            }
+
+        }
+        tmp = dizi[i];
+        dizi[i] = dizi[min];
+        dizi[min] = tmp;
+    }
+
+
+
+
+
+
+
+}
+void EklemeliSıralama(int dizi[], int n)
+{
+    for (int j = 1; j < n; j++)
+    {
+        int key = dizi[j];
+        int i = j - 1;
+        while (i >= 0 && dizi[i] > key)
+        {
+            dizi[i + 1] = dizi[i];
+            i = i - 1;
+        }
+        dizi[i + 1] = key;
+    }
+}
+void Birleştirme(int dizi[], int p, int q, int r) {
+    int n1 = q - p + 1;
+    int n2 = r - q;
+    int* L = new int[n1];
+    int* M = new int[n1];
+
+    for (int i = 0; i < n1; i++)
+        L[i] = dizi[p + i];
+    for (int j = 0; j < n2; j++)
+        M[j] = dizi[q + 1 + j];
+
+
+    int i, j, k;
+    i = 0;
+    j = 0;
+    k = p;
+
+    while (i < n1 && j < n2) {
+        if (L[i] <= M[j]) {
+            dizi[k] = L[i];
+            i++;
+        }
+        else {
+            dizi[k] = M[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        dizi[k] = L[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        dizi[k] = M[j];
+        j++;
+        k++;
+    }
+}
+void BirleştirmeliSıralama(int dizi[], int l, int r) {
+    if (l < r) {
+
+        int m = l + (r - l) / 2;
+
+        BirleştirmeliSıralama(dizi, l, m);
+        BirleştirmeliSıralama(dizi, m + 1, r);
+
+        Birleştirme(dizi, l, m, r);
+    }
+}
+
+
+void yaz(int dizi[], int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        cout << dizi[i] << endl;
+    }
+}
+void doldur(int dizi[], int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        dizi[i] = rand() % n + 1;
+    }
+}
+
+
+
+int main()
+{
+
+    setlocale(LC_ALL, "Turkish");
+
+    //Sayarak Sıralama (Counting Sort)
+    for (int i = 1; i <= 6; i++)
+    {
+        int n = pow(10, i);
+        int* dizi = new int[n];
+        doldur(dizi, n);
+        clock_t t1 = 0, t2 = 0;
+        t1 = clock();
+        SayarakSıralama(dizi, n);
+        t2 = clock();
+        float ms = (((float)t2 - (float)t1));
+        cout << "Sayarak Sıralama" << n << " İçin " << ms << "ms sürdü" << endl;
+
+    }
+    cout << "-------------" << endl;
+    //Kabarcık Sıralaması (Baloncuk sıralaması, Bubble Sort)
+    for (int i = 1; i <= 6; i++)
+    {
+        int n = pow(10, i);
+        int* dizi = new int[n];
+        doldur(dizi, n);
+        clock_t t1 = 0, t2 = 0;
+        t1 = clock();
+        BaloncukSıralama(dizi, n);
+        t2 = clock();
+        float ms = (((float)t2 - (float)t1));
+        cout << "Baloncuk Sıralama" << n << " İçin " << ms << "ms sürdü" << endl;
+
+    }
+    cout << "-------------" << endl;
+    //Seçerek Sıralama (Selection Sort
+    for (int i = 1; i <= 6; i++)
+    {
+        int n = pow(10, i);
+        int* dizi = new int[n];
+        doldur(dizi, n);
+        clock_t t1 = 0, t2 = 0;
+        t1 = clock();
+        SecerekSıralama(dizi, n);
+        t2 = clock();
+        float ms = (((float)t2 - (float)t1));
+        cout << "Seçerek Sıralama" << n << " İçin " << ms << "ms sürdü" << endl;;
+
+    }
+    cout << "-------------" << endl;
+    //Eklemeli sıralama (Insertion Sort)
+    for (int i = 1; i <= 6; i++)
+    {
+        int n = pow(10, i);
+        int* dizi = new int[n];
+        doldur(dizi, n);
+        clock_t t1 = 0, t2 = 0;
+        t1 = clock();
+        EklemeliSıralama(dizi, n);
+        t2 = clock();
+        float ms = (((float)t2 - (float)t1));
+        cout << "Eklemekli Sıralama" << n << " İçin " << ms << "ms sürdü" << endl;
+
+    }
+    cout << "-------------" << endl;
+    //Birleştirme Sıralaması (Merge Sort)
+    for (int i = 1; i <= 6; i++)
+    {
+        int n = pow(10, i);
+        int* dizi = new int[n];
+        doldur(dizi, n);
+        clock_t t1 = 0, t2 = 0;
+        t1 = clock();
+        BirleştirmeliSıralama(dizi, 0, n - 1);
+        t2 = clock();
+        float ms = (((float)t2 - (float)t1));
+        cout << "Birleştirmeli Sıralama" << n << " İçin " << ms << "ms sürdü" << endl;
+
+    }
+    cout << "-------------" << endl;
+
+    //Şanslı Sıralama (Lucky Sort)
+    //dizi zaten sıralı olarak geldiği için hiçbir şey yapmamıza gerek yok :)
+
+
+}
+
+
